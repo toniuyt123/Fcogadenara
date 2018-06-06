@@ -13,25 +13,16 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace GamesSQL
+namespace GamesSQL.Views
 {
     /// <summary>
-    /// Interaction logic for MainWindow.xaml
+    /// Interaction logic for GameView.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class GameView : UserControl
     {
-        public MainWindow()
+        public GameView()
         {
             InitializeComponent();
-        }
-
-        private void GameViewControl_Loaded(object sender, RoutedEventArgs e)
-        {
-            GamesSQL.ViewModel.GameViewModel gameViewModelObject =
-               new GamesSQL.ViewModel.GameViewModel();
-            gameViewModelObject.LoadGames();
-
-            GameViewControl.DataContext = gameViewModelObject;
         }
     }
 }

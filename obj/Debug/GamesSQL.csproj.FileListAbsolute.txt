@@ -1,0 +1,17 @@
+E:\visual studio shit\GamesSQL\GamesSQL\bin\Debug\GamesSQL.exe.config
+E:\visual studio shit\GamesSQL\GamesSQL\bin\Debug\GamesSQL.exe
+E:\visual studio shit\GamesSQL\GamesSQL\bin\Debug\GamesSQL.pdb
+E:\visual studio shit\GamesSQL\GamesSQL\obj\Debug\GamesSQL.csprojResolveAssemblyReference.cache
+E:\visual studio shit\GamesSQL\GamesSQL\obj\Debug\MainWindow.g.cs
+E:\visual studio shit\GamesSQL\GamesSQL\obj\Debug\Views\GameView.g.cs
+E:\visual studio shit\GamesSQL\GamesSQL\obj\Debug\App.g.cs
+E:\visual studio shit\GamesSQL\GamesSQL\obj\Debug\GeneratedInternalTypeHelper.g.cs
+E:\visual studio shit\GamesSQL\GamesSQL\obj\Debug\GamesSQL_MarkupCompile.cache
+E:\visual studio shit\GamesSQL\GamesSQL\obj\Debug\GamesSQL_MarkupCompile.lref
+E:\visual studio shit\GamesSQL\GamesSQL\obj\Debug\MainWindow.baml
+E:\visual studio shit\GamesSQL\GamesSQL\obj\Debug\Views\GameView.baml
+E:\visual studio shit\GamesSQL\GamesSQL\obj\Debug\GamesSQL.g.resources
+E:\visual studio shit\GamesSQL\GamesSQL\obj\Debug\GamesSQL.Properties.Resources.resources
+E:\visual studio shit\GamesSQL\GamesSQL\obj\Debug\GamesSQL.csproj.GenerateResource.Cache
+E:\visual studio shit\GamesSQL\GamesSQL\obj\Debug\GamesSQL.exe
+E:\visual studio shit\GamesSQL\GamesSQL\obj\Debug\GamesSQL.pdb
