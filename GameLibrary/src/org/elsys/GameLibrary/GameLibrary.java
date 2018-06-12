@@ -40,8 +40,7 @@ public class GameLibrary {
 						+ "Title VARCHAR(100),"
 						+ "PublisherId INTEGER NOT NULL,"
 						+ "ReleaseDate DATE NOT NULL,"
-						+ "FOREIGN KEY(PublisherId) REFERENCES Publishers(Id),"
-						+ "FOREIGN KEY(Status) REFERENCES Statuses(Id)"
+						+ "FOREIGN KEY(PublisherId) REFERENCES Publishers(Id)"
 						+ ");");
 				
 				query.execute("CREATE TABLE GamesTags("
@@ -55,18 +54,21 @@ public class GameLibrary {
 				query.execute("CREATE TABLE Users ("
 						+ "Id INTEGER NOT NULL AUTO_INCREMENT PRIMARY KEY,"
 						+ "RealName VARCHAR(100) NOT NULL,"
-						+ "UserName VARCHAR(100) NOT NULL,"
+						+ "Username VARCHAR(100) NOT NULL,"
 						+ "Age INTEGER NOT NULL,"
 						+ "PasswordHash VARCHAR(250) NOT NULL,"
 						+ "CONSTRAINT U_User UNIQUE (UserName, PasswordHash)"
 						+ ");");
 				
 				query.execute("CREATE TABLE GamesUsers ("
-						+ "GameId INTEGER NOT NULL,"
 						+ "UserId INTEGER NOT NULL,"
-						+ "Status INTEGER,"
+						+ "GameId INTEGER NOT NULL,"
 						+ "Rating NUMERIC(4, 2),"
-						+ "PRIMARY KEY (GameId, UserId)"
+						+ "Status INTEGER,"
+						+ "PRIMARY KEY (GameId, UserId),"
+						+ "FOREIGN KEY(GameId) REFERENCES Games(Id),"
+						+ "FOREIGN KEY(UserId) REFERENCES Users(Id),"
+						+ "FOREIGN KEY(Status) REFERENCES Statuses(Id)"
 						+ ");");
 				
 				conn.setAutoCommit(false);
@@ -80,14 +82,15 @@ public class GameLibrary {
 						prp.setString(3, ratings[i]);
 						prp.executeUpdate();
 					}
-					
-					insertSql = "INSERT INTO Statuses(Status) VALUES(?)";
+
+					insertSql = "INSERT INTO Statuses (Status) VALUES(?)";
 					prp = conn.prepareStatement(insertSql);
 					String statuses[] = {"Plan to Play", "Playing", "Completed"};
 					for(int i = 0;i < statuses.length;i++) {
 						prp.setString(1, statuses[i]);
 						prp.executeUpdate();
 					}
+
 					conn.commit();
 				} catch (Exception e){
 					conn.rollback();
@@ -97,7 +100,7 @@ public class GameLibrary {
 				}
 			}
 		} catch (Exception e) {
-			System.out.print(e.getMessage());
+			e.printStackTrace();
 		}
 	}
 	
@@ -136,28 +139,38 @@ public class GameLibrary {
 			stm.executeUpdate(sql);
 			sql = "INSERT INTO Tags (Tag) VALUES('Battle Royale')";
 			stm.executeUpdate(sql);
-			
+
 			sql = "INSERT INTO Games (Title, PublisherId, ReleaseDate) VALUES('Fortnite', 1, '2017-07-25')";
 			stm.executeUpdate(sql);
-			sql = "INSERT INTO Games (Title, PublisherId, ReleaseDate, Rating) VALUES('The Elder Scrolls V: Skyrim', 2, '2011-11-11', 9.00)";
+			sql = "INSERT INTO Games (Title, PublisherId, ReleaseDate) VALUES('The Elder Scrolls V: Skyrim', 2, '2011-11-11')";
 			stm.executeUpdate(sql);
 			sql = "INSERT INTO Games (Title, PublisherId, ReleaseDate) VALUES('Fallout 4', 2, '2015-11-10')";
 			stm.executeUpdate(sql);
 			sql = "INSERT INTO Games (Title, PublisherId, ReleaseDate) VALUES('The Legend of Zelda: Breath of the Wild', 2, '2017-03-03')";
 			stm.executeUpdate(sql);
-			sql = "INSERT INTO Games (Title, PublisherId, ReleaseDate, Status) VALUES('Super Mario Bros.', 2, '1985-09-13', 2)";
+			sql = "INSERT INTO Games (Title, PublisherId, ReleaseDate) VALUES('Super Mario Bros. 2', 2, '1985-09-13')";
 			stm.executeUpdate(sql);
 			sql = "INSERT INTO Games (Title, PublisherId, ReleaseDate) VALUES('Bayonetta 2', 2, '2014-09-20')";
 			stm.executeUpdate(sql);
-			sql = "INSERT INTO Games (Title, PublisherId, ReleaseDate, Rating, Status) VALUES('World of Warcraft', 4, '2004-11-23', 10.00, 3)";
+			sql = "INSERT INTO Games (Title, PublisherId, ReleaseDate) VALUES('World of Warcraft', 4, '2004-11-23')";
 			stm.executeUpdate(sql);
 			sql = "INSERT INTO Games (Title, PublisherId, ReleaseDate) VALUES('Warcraft II: Tides of Darkness', 4, '1995-12-09')";
 			stm.executeUpdate(sql);
-			System.out.println("aaaa");
+
 			sql = "INSERT INTO GamesTags VALUES (1, 1), (1, 10), (1, 8),"
 					+ "(2, 1), (2, 7), (2, 9), " + "(4, 1), (4, 9), "
 					+ "(5, 2), (5, 5)," + "(6, 7)," + "(7, 3), (7, 2), (7, 9), (7, 7),"
 					+ "(8, 2), (8, 8);";
+			stm.executeUpdate(sql);
+			
+			sql = "INSERT INTO Users (RealName, Username, Age, PasswordHash) VALUES('Antonio Milev', 'Toniuyt', 17, 'kekeckekec')";
+			stm.executeUpdate(sql);
+			sql = "INSERT INTO Users (RealName, Username, Age, PasswordHash) VALUES('Tele Tubis', 'Gamercheto', 42, 'ednodvetri')";
+			stm.executeUpdate(sql);
+			
+			sql = "INSERT INTO GamesUsers VALUES (1, 1, 8.00, 2), (1, 5, 10.00, 3), (1, 7, 9.69, 3)";
+			stm.executeUpdate(sql);
+			sql = "INSERT INTO GamesUsers (UserId, GameId) VALUES (2, 2), (2, 6)";
 			stm.executeUpdate(sql);
 			
 			conn.commit();
