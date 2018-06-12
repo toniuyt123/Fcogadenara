@@ -43,29 +43,6 @@ public class User {
 		return this.id;
 	}
 	
-	public static void createUserTable(Connection conn) throws SQLException {
-		Statement query = null;
-		try {
-			query = conn.createStatement();
-			query.execute("CREATE TABLE Users ("
-					+ "Id INTEGER NOT NULL AUTO_INCREMENT PRIMARY KEY,"
-					+ "RealName VARCHAR(100) NOT NULL,"
-					+ "UserName VARCHAR(100) NOT NULL,"
-					+ "Age INTEGER NOT NULL,"
-					+ "PasswordHash VARCHAR(250) NOT NULL,"
-					+ "CONSTRAINT U_User UNIQUE (UserName, "
-					+ "PasswordHash)"
-					+ ");");
-			conn.setAutoCommit(false);
-		}catch (Exception e) {
-			System.out.print(e.getMessage());
-		}finally {
-			if(query != null) {
-				query.close();
-			}
-		}
-	}
-	
 	public static void addUser(Connection conn, User user) throws SQLException {
 		PreparedStatement prp = null;
 		conn.setAutoCommit(false);

@@ -40,8 +40,6 @@ public class GameLibrary {
 						+ "Title VARCHAR(100),"
 						+ "PublisherId INTEGER NOT NULL,"
 						+ "ReleaseDate DATE NOT NULL,"
-						+ "Rating NUMERIC(4, 2),"
-						+ "Status INTEGER,"
 						+ "FOREIGN KEY(PublisherId) REFERENCES Publishers(Id),"
 						+ "FOREIGN KEY(Status) REFERENCES Statuses(Id)"
 						+ ");");
@@ -52,6 +50,23 @@ public class GameLibrary {
 						+ "PRIMARY KEY (GameId, TagId),"
 						+ "FOREIGN KEY(GameId) REFERENCES Games(Id),"
 						+ "FOREIGN KEY(TagId) REFERENCES Tags(Id)"
+						+ ");");
+				
+				query.execute("CREATE TABLE Users ("
+						+ "Id INTEGER NOT NULL AUTO_INCREMENT PRIMARY KEY,"
+						+ "RealName VARCHAR(100) NOT NULL,"
+						+ "UserName VARCHAR(100) NOT NULL,"
+						+ "Age INTEGER NOT NULL,"
+						+ "PasswordHash VARCHAR(250) NOT NULL,"
+						+ "CONSTRAINT U_User UNIQUE (UserName, PasswordHash)"
+						+ ");");
+				
+				query.execute("CREATE TABLE GamesUsers ("
+						+ "GameId INTEGER NOT NULL,"
+						+ "UserId INTEGER NOT NULL,"
+						+ "Status INTEGER,"
+						+ "Rating NUMERIC(4, 2),"
+						+ "PRIMARY KEY (GameId, UserId)"
 						+ ");");
 				
 				conn.setAutoCommit(false);
