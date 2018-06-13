@@ -146,11 +146,11 @@ public class GameLibrary {
 			stm.executeUpdate(sql);
 			sql = "INSERT INTO Games (Title, PublisherId, ReleaseDate) VALUES('Fallout 4', 2, '2015-11-10')";
 			stm.executeUpdate(sql);
-			sql = "INSERT INTO Games (Title, PublisherId, ReleaseDate) VALUES('The Legend of Zelda: Breath of the Wild', 2, '2017-03-03')";
+			sql = "INSERT INTO Games (Title, PublisherId, ReleaseDate) VALUES('The Legend of Zelda: Breath of the Wild', 3, '2017-03-03')";
 			stm.executeUpdate(sql);
-			sql = "INSERT INTO Games (Title, PublisherId, ReleaseDate) VALUES('Super Mario Bros. 2', 2, '1985-09-13')";
+			sql = "INSERT INTO Games (Title, PublisherId, ReleaseDate) VALUES('Super Mario Bros. 2', 3, '1985-09-13')";
 			stm.executeUpdate(sql);
-			sql = "INSERT INTO Games (Title, PublisherId, ReleaseDate) VALUES('Bayonetta 2', 2, '2014-09-20')";
+			sql = "INSERT INTO Games (Title, PublisherId, ReleaseDate) VALUES('Bayonetta 2', 3, '2014-09-20')";
 			stm.executeUpdate(sql);
 			sql = "INSERT INTO Games (Title, PublisherId, ReleaseDate) VALUES('World of Warcraft', 4, '2004-11-23')";
 			stm.executeUpdate(sql);
@@ -179,6 +179,34 @@ public class GameLibrary {
 			throw e;
 		} finally {
 			conn.setAutoCommit(false);
+		}
+	}
+	
+	public static void showUserGames(User user, Connection conn) {
+		try {
+			String selectSql = "SELECT g.Id, g.Title, p.Name, gu.Rating, s.Status FROM GamesUsers gu\n" + 
+					"LEFT JOIN Games g ON g.Id = gu.GameId\n" + 
+					"LEFT JOIN Users u ON u.Id = gu.UserId\n" + 
+					"LEFT JOIN Publishers p ON g.PublisherId = p.Id\n" + 
+					"LEFT JOIN Statuses s ON gu.Status = s.Id\n" + 
+					"WHERE u.Id = ?;";
+			PreparedStatement prp = conn.prepareStatement(selectSql);
+			prp.setInt(1, user.getId());
+			ResultSet result = prp.executeQuery();
+			
+			int len = 20;
+			System.out.println(String.format("%1$-3s | %2$-"+len+"s | %3$-"+len+"s | %4$-6s | %5$-13s |", "Num", "Title", "Publisher", "Rating", "Status"));
+			System.out.println("----------------------------------------------------------------------------");
+			int num = 0;
+			while(result.next()) {
+				System.out.println(String.format("%1$-3d | %2$-"+len+"s | %3$-"+len+"s | %4$-6s | %5$-13s |"
+						, ++num, result.getString("Title").substring(0, Math.min(len, result.getString("Title").length()))
+						, result.getString("Name").substring(0, Math.min(len, result.getString("Name").length()))
+						, result.getDouble("Rating"), result.getString("Status")));
+				System.out.println("----------------------------------------------------------------------------");
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
 		}
 	}
 }
