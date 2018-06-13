@@ -37,7 +37,7 @@ public class GameLibrary {
 				
 				query.execute("CREATE TABLE Games ("
 						+ "Id INTEGER NOT NULL AUTO_INCREMENT PRIMARY KEY,"
-						+ "Title VARCHAR(100),"
+						+ "Title VARCHAR(100) NOT NULL,"
 						+ "PublisherId INTEGER NOT NULL,"
 						+ "ReleaseDate DATE NOT NULL,"
 						+ "FOREIGN KEY(PublisherId) REFERENCES Publishers(Id)"
@@ -159,7 +159,7 @@ public class GameLibrary {
 
 			sql = "INSERT INTO GamesTags VALUES (1, 1), (1, 10), (1, 8),"
 					+ "(2, 1), (2, 7), (2, 9), " + "(4, 1), (4, 9), "
-					+ "(5, 2), (5, 5)," + "(6, 7)," + "(7, 3), (7, 2), (7, 9), (7, 7),"
+					+ "(5, 2), (5, 5)," + "(6, 7)," + "(7, 3), (7, 1), (7, 9), (7, 7),"
 					+ "(8, 2), (8, 8);";
 			stm.executeUpdate(sql);
 			
@@ -203,10 +203,11 @@ public class GameLibrary {
 			System.out.println("----------------------------------------------------------------------------");
 			int num = 0;
 			while(result.next()) {
+				String title = result.getString("Title").substring(0, Math.min(len, result.getString("Title").length()));
+				String name = result.getString("Name").substring(0, Math.min(len, result.getString("Name").length()));
+				
 				System.out.println(String.format("%1$-3d | %2$-"+len+"s | %3$-"+len+"s | %4$-6s | %5$-13s |"
-						, ++num, result.getString("Title").substring(0, Math.min(len, result.getString("Title").length()))
-						, result.getString("Name").substring(0, Math.min(len, result.getString("Name").length()))
-						, result.getDouble("Rating"), result.getString("Status")));
+						, ++num, title, name, result.getDouble("Rating"), result.getString("Status")));
 				System.out.println("----------------------------------------------------------------------------");
 			}
 		} catch (SQLException e) {
@@ -216,22 +217,34 @@ public class GameLibrary {
 	
 	public static void showAllGames(Connection conn) {
 		try {
-			String selectSql = "SELECT g.Id, g.Title, p.Name, g.ReleaseDate, AVG(gu.Rating) AS AverageRating FROM Games g\n" + 
-					"LEFT JOIN GamesUsers gu ON g.Id = gu.GameId\n" + 
-					"LEFT JOIN Publishers p ON g.PublisherId = p.Id\n" + 
-					"GROUP BY g.Id, g.Title, p.Name;";
+			String selectSql = "SELECT n.Id, n.Title, n.Name, n.ReleaseDate, n.Rating, GROUP_CONCAT(n.Tag SEPARATOR ', ') AS Tags FROM (\n" + 
+					"	SELECT g.Id, g.Title, p.Name, g.ReleaseDate, AVG(gu.Rating) AS Rating, t.Tag FROM Games g\n" + 
+					"	LEFT JOIN Publishers p ON g.PublisherId = p.Id\n" + 
+					"	LEFT JOIN GamesTags gt ON g.Id = gt.GameId\n" + 
+					"	LEFT JOIN Tags t ON t.Id = gt.TagId\n" + 
+					"	LEFT JOIN GamesUsers gu ON g.Id = gu.GameId\n" + 
+					"	GROUP BY g.Id, g.Title, p.Name, g.ReleaseDate, gt.GameId, t.Id ) AS n\n" + 
+					"GROUP BY n.Id, n.Title, n.Name, n.ReleaseDate, n.Rating;";
 			Statement st = conn.createStatement();
 			ResultSet result = st.executeQuery(selectSql);
 			
 			int len = 20;
-			System.out.println(String.format("%1$-3s | %2$-"+len+"s | %3$-"+len+"s | %4$-10s | %5$-6s |", "Id", "Title", "Publisher", "Released", "Rating"));
-			System.out.println("-------------------------------------------------------------------------");
+			System.out.println(String.format("%1$-3s | %2$-"+len+"s | %3$-"+len+"s | %4$-10s | %5$-6s | %6$-25s |", "Id", "Title", "Publisher", "Released", "Rating", "Tags"));
+			System.out.println("-----------------------------------------------------------------------------------------------------");
+			
 			while(result.next()) {
-				System.out.println(String.format("%1$-3d | %2$-"+len+"s | %3$-"+len+"s | %4$-10s | %5$-6.2f |"
-						, result.getInt("Id"), result.getString("Title").substring(0, Math.min(len, result.getString("Title").length()))
-						, result.getString("Name").substring(0, Math.min(len, result.getString("Name").length()))
-						, result.getDate("ReleaseDate"), result.getDouble("AverageRating")));
-				System.out.println("-------------------------------------------------------------------------");
+				String tags = result.getString("Tags");
+				if(tags == null) {
+					tags = "";
+				} else {
+					tags = tags.substring(0, Math.min(len + 5, result.getString("Tags").length()));
+				}
+				String title = result.getString("Title").substring(0, Math.min(len, result.getString("Title").length()));
+				String name = result.getString("Name").substring(0, Math.min(len, result.getString("Name").length()));
+				
+				System.out.println(String.format("%1$-3d | %2$-"+len+"s | %3$-"+len+"s | %4$-10s | %5$-6.2f | %6$-25s |"
+						, result.getInt("Id"), title, name, result.getDate("ReleaseDate"), result.getDouble("Rating"), tags));
+				System.out.println("-----------------------------------------------------------------------------------------------------");
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
