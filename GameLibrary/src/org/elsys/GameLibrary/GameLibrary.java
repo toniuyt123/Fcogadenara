@@ -167,10 +167,14 @@ public class GameLibrary {
 			stm.executeUpdate(sql);
 			sql = "INSERT INTO Users (RealName, Username, Age, PasswordHash) VALUES('Tele Tubis', 'Gamercheto', 42, 'ednodvetri')";
 			stm.executeUpdate(sql);
+			sql = "INSERT INTO Users (RealName, Username, Age, PasswordHash) VALUES('Todor The Taliban', 'TTT', 18, 'ugabugauga')";
+			stm.executeUpdate(sql);
 			
 			sql = "INSERT INTO GamesUsers VALUES (1, 1, 8.00, 2), (1, 5, 10.00, 3), (1, 7, 9.69, 3)";
 			stm.executeUpdate(sql);
 			sql = "INSERT INTO GamesUsers (UserId, GameId) VALUES (2, 2), (2, 6)";
+			stm.executeUpdate(sql);
+			sql = "INSERT INTO GamesUsers (UserId, GameId, Rating) VALUES (3, 5, 5.00), (3, 8, 3.45)";
 			stm.executeUpdate(sql);
 			
 			conn.commit();
@@ -204,6 +208,30 @@ public class GameLibrary {
 						, result.getString("Name").substring(0, Math.min(len, result.getString("Name").length()))
 						, result.getDouble("Rating"), result.getString("Status")));
 				System.out.println("----------------------------------------------------------------------------");
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public static void showAllGames(Connection conn) {
+		try {
+			String selectSql = "SELECT g.Id, g.Title, p.Name, g.ReleaseDate, AVG(gu.Rating) AS AverageRating FROM Games g\n" + 
+					"LEFT JOIN GamesUsers gu ON g.Id = gu.GameId\n" + 
+					"LEFT JOIN Publishers p ON g.PublisherId = p.Id\n" + 
+					"GROUP BY g.Id, g.Title, p.Name;";
+			Statement st = conn.createStatement();
+			ResultSet result = st.executeQuery(selectSql);
+			
+			int len = 20;
+			System.out.println(String.format("%1$-3s | %2$-"+len+"s | %3$-"+len+"s | %4$-10s | %5$-6s |", "Id", "Title", "Publisher", "Released", "Rating"));
+			System.out.println("-------------------------------------------------------------------------");
+			while(result.next()) {
+				System.out.println(String.format("%1$-3d | %2$-"+len+"s | %3$-"+len+"s | %4$-10s | %5$-6.2f |"
+						, result.getInt("Id"), result.getString("Title").substring(0, Math.min(len, result.getString("Title").length()))
+						, result.getString("Name").substring(0, Math.min(len, result.getString("Name").length()))
+						, result.getDate("ReleaseDate"), result.getDouble("AverageRating")));
+				System.out.println("-------------------------------------------------------------------------");
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
