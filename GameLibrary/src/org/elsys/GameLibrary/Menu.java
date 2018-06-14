@@ -1,6 +1,7 @@
 package org.elsys.GameLibrary;
 
 import java.util.List;
+import java.util.Scanner;
 
 public abstract class Menu {
 	protected String menuId;
@@ -23,18 +24,20 @@ public abstract class Menu {
 	
 	
 	public Menu findSubMenu(String id) {
-		//System.out.println(id);
 		for(Menu m : subMenus) {
-			//System.out.println(m.getId());
 			if(m.getId().equals(id)) {
 				return m;
 			}
 		}
+		System.out.print("\n\n\n\n\n");
+		this.show();
 		System.out.println("Wrong selection.");
 		return null;
 	}
 	
-	public Menu showSubMenus() {
+	public void showSubMenus() {
+		if(subMenus == null)
+			return;
 		StringBuilder sb = new StringBuilder();
 		System.out.println(name);
 		System.out.println("List of available commands: ");
@@ -46,27 +49,22 @@ public abstract class Menu {
 		int len = sb.toString().length();
 		for(int i = 0; i < len * 2; i ++) {
 			System.out.print("-");	
-			if(i == len) {
+			if(i + 1 == len) {
 				System.out.print("\n");
 				System.out.println(sb.toString());
 			}
 		}
 		System.out.print("\n");
-		return this;
 	}
 	
 	public Menu getSelectedSub(String in) {
 		Menu res = null;
-		//System.out.println("tuk2");
-		while(res == null) {
-			//System.out.println("tuk");
-			res = findSubMenu(in);
-		}
+		res = findSubMenu(in);
 		return res;
 	}
 	
-	public abstract Menu action(Menu caller, String in);
+	public abstract Object action(Menu caller, Scanner in);
 	
-	public abstract Menu show();
+	public abstract void show();
 
 }

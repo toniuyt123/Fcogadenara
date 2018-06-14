@@ -1,19 +1,25 @@
 package org.elsys.GameLibrary;
 
 import java.util.List;
+import java.util.Scanner;
 
 public class MainMenu extends Menu {
 	
 	public MainMenu(String id, String name, List<Menu> subMenus) {
 		super(id, name, subMenus);
 	}
-	
-	public Menu show() {
-		return showSubMenus();
+	@Override
+	public void show() {
+		showSubMenus();
 	}
-	
-	public Menu action(Menu caller, String in) {
+	@Override
+	public Object action(Menu caller, Scanner in) {
 		caller = this;
-		return getSelectedSub(in);
+		Menu res = null; 
+		while(res == null) {
+			res = getSelectedSub(in.next());
+		}
+		return res;
+			
 	}
 }
