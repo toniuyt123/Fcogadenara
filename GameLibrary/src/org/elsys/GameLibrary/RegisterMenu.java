@@ -7,10 +7,12 @@ public class RegisterMenu extends Menu {
 		super(id, name, subMenus);
 	}
 	
+	@Override
 	public Menu show() {
 		return showSubMenus();
 	}
 	
+	@Override
 	public Menu action(Menu caller, String in) {
 		Menu res = null;
 		//System.out.print("ae we1");
