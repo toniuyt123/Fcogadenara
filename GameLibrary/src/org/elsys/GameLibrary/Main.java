@@ -21,11 +21,14 @@ public class Main {
 			BackMenu back = new BackMenu("0", "Back", null);
 			ExitMenu exit = new ExitMenu("0", "Exit", null);
 			RegisterMenu register = new RegisterMenu("1", "Register", null);
-			MainMenu main = new MainMenu("-", "Main Menu", new ArrayList<Menu>(Arrays.asList(exit, register)));
+			LoginMenu login = new LoginMenu("2", "Login", null);
+			MainMenu main = new MainMenu("-", "Main Menu", new ArrayList<Menu>(Arrays.asList(exit, register, login)));
 	//		/main.show();
 			Menu oldMenu = main, currMenu =  main;
 			Scanner in = new Scanner(System.in);
 			boolean shown = false;
+			User currUser = null;
+			Publisher currPubl = null;
 			while(true) {
 				if(!shown) {
 					System.out.print("\n\n\n\n\n");
@@ -36,7 +39,11 @@ public class Main {
 					Object res = currMenu.action(oldMenu, in);
 					if(res instanceof User)
 					{
-						User.addUser(conn, (User) res);
+						if(currMenu instanceof RegisterMenu) {
+							User.addUser(conn, (User) res);
+						}else if(currMenu instanceof LoginMenu) {
+							currUser = (User) res;
+						}
 						currMenu = oldMenu;
 					}else if(res instanceof Menu) {
 						currMenu = (Menu) res;

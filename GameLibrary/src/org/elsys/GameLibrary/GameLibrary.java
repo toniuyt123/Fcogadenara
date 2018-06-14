@@ -17,7 +17,7 @@ public class GameLibrary {
 						+ "Id INTEGER NOT NULL AUTO_INCREMENT PRIMARY KEY,"
 						+ "Name VARCHAR(100) NOT NULL,"
 						+ "EstablishedDate DATE NOT NULL,"
-						+ "PasswordHash VARCHAR(250) NOT NULL,"
+						+ "PasswordHash VARCHAR(250) NOT NULL"
 						+ ");");
 				
 				query.execute("CREATE TABLE RatingAsWord ("
@@ -58,7 +58,8 @@ public class GameLibrary {
 						+ "Username VARCHAR(100) NOT NULL,"
 						+ "Age INTEGER NOT NULL,"
 						+ "PasswordHash VARCHAR(250) NOT NULL,"
-						+ "CONSTRAINT U_User UNIQUE (UserName, PasswordHash)"
+						+ "PasswordSalt BLOB,"
+						+ "CONSTRAINT U_User UNIQUE (UserName)"
 						+ ");");
 				
 				query.execute("CREATE TABLE GamesUsers ("

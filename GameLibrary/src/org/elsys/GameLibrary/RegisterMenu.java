@@ -2,6 +2,7 @@ package org.elsys.GameLibrary;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.security.NoSuchProviderException;
 import java.security.SecureRandom;
 import java.util.List;
 import java.util.Scanner;
@@ -11,15 +12,20 @@ public class RegisterMenu extends Menu {
 		super(id, name, subMenus);
 	}
 	
-	private static byte[] getSalt() {
-        SecureRandom sr = new SecureRandom();
-        byte[] salt = new byte[20];
-        sr.nextBytes(salt);
+	private static byte[] getSalt(){
+		SecureRandom sr;
+		byte[] salt = new byte[20];
+		try {
+			sr = SecureRandom.getInstance("SHA1PRNG", "SUN");
+		    sr.nextBytes(salt);
+		} catch (NoSuchAlgorithmException | NoSuchProviderException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
         return salt;
     } 
 	
-	private static String getSecurePassword(String passwordToHash, byte[] salt)
-    {
+	public static String getSecurePassword(String passwordToHash, byte[] salt) {
         String generatedPassword = null;
         try {
             MessageDigest md = MessageDigest.getInstance("MD5");
@@ -35,8 +41,10 @@ public class RegisterMenu extends Menu {
         catch (NoSuchAlgorithmException e) {
             e.printStackTrace();
         }
+        System.out.println("SECURE PASS" + salt);
         return generatedPassword;
     }
+	
 	@Override
 	public void show() {
 		System.out.print("Enter Username Name: ");
@@ -62,20 +70,10 @@ public class RegisterMenu extends Menu {
 		}
 		byte[] salt = getSalt();
 		String passHash = ""; 
+		System.out.println("Action+ " + salt);
 		passHash = getSecurePassword(passHash, salt);
-		
-		User user = new User(userName, realName, passHash, age);
-		/*Menu res = null;
-		//System.out.print("ae we1");
-		res = getSelectedSub(in);
-		//System.out.print("ae we1");
-		if(res != null) {
-			if(res instanceof BackMenu) {
-				//System.out.print("ae we");
-				return res.action(caller, in);
-			}
-			return res;
-		}*/
+		System.out.println("LAStBIT" + salt);
+		User user = new User(userName, realName, passHash, salt, age);
 		return user;
 	}
 }
