@@ -7,10 +7,12 @@ public class BackMenu extends Menu {
 		super(id, name, subMenus);
 	}
 	
+	@Override
 	public Menu show() {
 		return this;
 	}
 	
+	@Override
 	public Menu action(Menu caller, String in) {
 		return caller;
 	}

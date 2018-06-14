@@ -8,10 +8,12 @@ public class MainMenu extends Menu {
 		super(id, name, subMenus);
 	}
 	
+	@Override
 	public Menu show() {
 		return showSubMenus();
 	}
 	
+	@Override
 	public Menu action(Menu caller, String in) {
 		caller = this;
 		return getSelectedSub(in);

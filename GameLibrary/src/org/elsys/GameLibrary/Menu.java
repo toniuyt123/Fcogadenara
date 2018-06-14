@@ -1,6 +1,7 @@
 package org.elsys.GameLibrary;
 
 import java.util.List;
+import java.util.Scanner;
 
 public abstract class Menu {
 	protected String menuId;
@@ -46,7 +47,7 @@ public abstract class Menu {
 		int len = sb.toString().length();
 		for(int i = 0; i < len * 2; i ++) {
 			System.out.print("-");	
-			if(i == len) {
+			if(i + 1 == len) {
 				System.out.print("\n");
 				System.out.println(sb.toString());
 			}
@@ -63,6 +64,21 @@ public abstract class Menu {
 			res = findSubMenu(in);
 		}
 		return res;
+	}
+	
+	public static boolean confirm(String confirmationString) {
+		System.out.println("confirmationString" + "(y/n):");
+		Scanner in = new Scanner(System.in);
+		while(true) {
+			String choice = in.nextLine();
+			if(choice.equals("y")) {
+				return true;
+			} else if(choice.equals("n")) {
+				return false;
+			} else {
+				System.out.println("Enter a valid option (y/n): ");
+			}
+		}
 	}
 	
 	public abstract Menu action(Menu caller, String in);

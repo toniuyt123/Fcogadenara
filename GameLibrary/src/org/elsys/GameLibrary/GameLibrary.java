@@ -16,7 +16,8 @@ public class GameLibrary {
 				query.execute("CREATE TABLE Publishers ("
 						+ "Id INTEGER NOT NULL AUTO_INCREMENT PRIMARY KEY,"
 						+ "Name VARCHAR(100) NOT NULL,"
-						+ "EstablishedDate DATE NOT NULL"
+						+ "EstablishedDate DATE NOT NULL,"
+						+ "PasswordHash VARCHAR(250) NOT NULL,"
 						+ ");");
 				
 				query.execute("CREATE TABLE RatingAsWord ("
@@ -108,15 +109,15 @@ public class GameLibrary {
 		conn.setAutoCommit(false);
 		try {
 			Statement stm = conn.createStatement();
-			String sql = "INSERT INTO Publishers (Name, EstablishedDate) VALUES('Epic Games', '1991-01-01')";
+			String sql = "INSERT INTO Publishers (Name, EstablishedDate, PasswordHash) VALUES('Epic Games', '1991-01-01', 'hashhash')";
 			stm.executeUpdate(sql);
-			sql = "INSERT INTO Publishers (Name, EstablishedDate) VALUES('Bethesda Softworks', '1986-06-28')";
+			sql = "INSERT INTO Publishers (Name, EstablishedDate, PasswordHash) VALUES('Bethesda Softworks', '1986-06-28', 'badibimm')";
 			stm.executeUpdate(sql);
-			sql = "INSERT INTO Publishers (Name, EstablishedDate) VALUES('Nintendo', '1889-09-23')";
+			sql = "INSERT INTO Publishers (Name, EstablishedDate, PasswordHash) VALUES('Nintendo', '1889-09-23', 'lolololo')";
 			stm.executeUpdate(sql);
-			sql = "INSERT INTO Publishers (Name, EstablishedDate) VALUES('Blizzard Entertainment', '1991-02-08')";
+			sql = "INSERT INTO Publishers (Name, EstablishedDate, PasswordHash) VALUES('Blizzard Entertainment', '1991-02-08', '12345678')";
 			stm.executeUpdate(sql);
-			sql = "INSERT INTO Publishers (Name, EstablishedDate) VALUES('EA', '1982-05-28')";
+			sql = "INSERT INTO Publishers (Name, EstablishedDate, PasswordHash) VALUES('EA', '1982-05-28', '87654321')";
 			stm.executeUpdate(sql);
 			
 			sql = "INSERT INTO Tags (Tag) VALUES('3D')";
@@ -184,7 +185,7 @@ public class GameLibrary {
 		} finally {
 			conn.setAutoCommit(false);
 		}
-	}
+	}	
 	
 	public static void showUserGames(User user, Connection conn) {
 		try {
