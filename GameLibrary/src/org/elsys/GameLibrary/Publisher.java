@@ -81,26 +81,19 @@ public class Publisher {
 	}
 	
 	public static void deletePublisher(Connection conn, String name, String passHash) throws SQLException {
-		if(Menu.confirm("Are you sure you want to delete your publisher - " + name)) {
-			PreparedStatement prp = null;
-			conn.setAutoCommit(false);
-			try {
-				String selectString = "DELETE * FROM Publishers WHERE UserName = ? AND PasswordHash = ?";
-				prp = conn.prepareStatement(selectString);
-				prp.setString(1, name);
-				prp.setString(2, passHash);
-				ResultSet rs = prp.executeQuery();
-				rs.next();
-				String pname = rs.getString("Name");
-				
-				String established = rs.getString("EstablishedDate");
-				int id = rs.getInt("Id");
-			}catch (Exception e){
-				System.out.println(e.getMessage());
-			} finally {
-				if (prp != null) {
-					prp.close();
-				}
+		PreparedStatement prp = null;
+		conn.setAutoCommit(false);
+		try {
+			String selectString = "DELETE * FROM Publishers WHERE UserName = ? AND PasswordHash = ?";
+			prp = conn.prepareStatement(selectString);
+			prp.setString(1, name);
+			prp.setString(2, passHash);
+			prp.executeQuery();
+		}catch (Exception e){
+			System.out.println(e.getMessage());
+		} finally {
+			if (prp != null) {
+				prp.close();
 			}
 		}
 	}

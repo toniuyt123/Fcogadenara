@@ -64,9 +64,9 @@ public abstract class Menu {
 	}
 	
 	public abstract Object action(Menu caller, Scanner in);
-	public static boolean confirm(String confirmationString) {
+	
+	public static boolean confirm(String confirmationString, Scanner in) {
 		System.out.println("confirmationString" + "(y/n):");
-		Scanner in = new Scanner(System.in);
 		while(true) {
 			String choice = in.nextLine();
 			if(choice.equals("y")) {
