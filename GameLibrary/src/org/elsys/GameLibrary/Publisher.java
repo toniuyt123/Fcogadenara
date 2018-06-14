@@ -63,7 +63,7 @@ public class Publisher {
 			prp = conn.prepareStatement(selectString);
 			prp.setString(1, name);
 			prp.setString(2, passHash);
-			ResultSet rs = prp.executeQuery();
+			ResultSet rs = prp.executeQuery(); 
 			rs.next();
 			String pname = rs.getString("Name");
 			

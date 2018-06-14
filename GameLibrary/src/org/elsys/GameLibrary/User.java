@@ -63,7 +63,7 @@ public class User {
 			prp.setInt(3, user.getAge());
 			prp.setString(4, user.getPassHash());
 			prp.setBytes(5, user.getPassSalt());
-			System.out.println(user.getPassSalt());
+			//System.out.println(user.getPassSalt());
 			prp.executeUpdate();
 			conn.commit();
 		}catch (Exception e){
