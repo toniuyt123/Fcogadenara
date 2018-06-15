@@ -1,5 +1,6 @@
 package org.elsys.GameLibrary;
 import java.sql.*;
+import java.util.Scanner;
 
 public class User {
 	private String userName;
@@ -117,6 +118,32 @@ public class User {
 		}catch (Exception e){
 			System.out.println(e.getMessage());
 			return null;
+		} finally {
+			if (prp != null) {
+				prp.close();
+			}
+		}
+		
+	}
+	public void addGame(Connection conn, Scanner in) throws SQLException {
+		PreparedStatement prp = null;
+		conn.setAutoCommit(false);
+		try {
+			String insertString = "INSERT INTO GamesUsers "
+								+ "(UserId, GameId, Rating, Status)"
+								+ "Value(?, ?, ?, ?)";
+			prp = conn.prepareStatement(insertString);
+			prp.setInt(1, id);
+			GameLibrary.showAllGames(conn);
+			System.out.println("Enter game id");
+			prp.setInt(2, in.nextInt());
+			System.out.println("Enter game rating");
+			prp.setFloat(3, in.nextFloat());
+			System.out.println("Enter game Status");
+			prp.setFloat(4, in.nextFloat());
+			prp.executeQuery();
+		}catch (Exception e){
+			System.out.println(e.getMessage());
 		} finally {
 			if (prp != null) {
 				prp.close();

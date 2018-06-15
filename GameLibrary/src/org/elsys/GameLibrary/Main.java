@@ -21,8 +21,9 @@ public class Main {
 			BackMenu back = new BackMenu("0", "Back", null);
 			ExitMenu exit = new ExitMenu("0", "Exit", null);
 			RegisterMenu register = new RegisterMenu("1", "Register", null);
-			LoginMenu login = new LoginMenu("2", "Login", null);
-			MainMenu main = new MainMenu("-", "Main Menu", new ArrayList<Menu>(Arrays.asList(exit, register, login)));
+			LoginMenu login = new LoginMenu("2", "Login", null, conn);
+			UserMenu userMenu = new UserMenu("1", "User", new ArrayList<Menu>(Arrays.asList(back, register, login)), conn);
+			MainMenu main = new MainMenu("-", "Main Menu", new ArrayList<Menu>(Arrays.asList(exit, userMenu)));
 	//		/main.show();
 			Menu oldMenu = main, currMenu =  main;
 			Scanner in = new Scanner(System.in);
@@ -36,15 +37,16 @@ public class Main {
 					shown = true;
 				}
 				if(in.hasNext()) {
-					Object res = currMenu.action(oldMenu, in);
+					Object res = currMenu.action(currMenu, in);
 					if(res instanceof User)
 					{
 						if(currMenu instanceof RegisterMenu) {
 							User.addUser(conn, (User) res);
 						}else if(currMenu instanceof LoginMenu) {
 							currUser = (User) res;
+							userMenu.setCurrUser(currUser);
 						}
-						currMenu = oldMenu;
+						currMenu = currMenu.prevMenu;
 					}else if(res instanceof Menu) {
 						currMenu = (Menu) res;
 					}else if(res instanceof ExitMenu) {

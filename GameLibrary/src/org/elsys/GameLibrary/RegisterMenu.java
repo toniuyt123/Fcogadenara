@@ -51,6 +51,7 @@ public class RegisterMenu extends Menu {
 	}
 	@Override
 	public Object action(Menu caller, Scanner in) {
+		prevMenu = caller;
 		String userName = in.next();
 		System.out.print("Enter Real Name: ");
 		String realName = in.next();
@@ -68,7 +69,7 @@ public class RegisterMenu extends Menu {
 				System.out.println("Passwords dont match try again");
 			}
 		}
-		byte[] salt = getSalt();
+		byte[] salt = RegisterMenu.getSalt();
 		String passHash = ""; 
 		System.out.println("Action+ " + salt);
 		passHash = getSecurePassword(passHash, salt);
