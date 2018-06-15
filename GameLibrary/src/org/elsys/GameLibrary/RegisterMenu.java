@@ -19,7 +19,6 @@ public class RegisterMenu extends Menu {
 			sr = SecureRandom.getInstance("SHA1PRNG", "SUN");
 		    sr.nextBytes(salt);
 		} catch (NoSuchAlgorithmException | NoSuchProviderException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
         return salt;
@@ -41,7 +40,7 @@ public class RegisterMenu extends Menu {
         catch (NoSuchAlgorithmException e) {
             e.printStackTrace();
         }
-        System.out.println("SECURE PASS" + salt);
+        System.out.println("SECURE PASS" + generatedPassword);
         return generatedPassword;
     }
 	
@@ -69,12 +68,11 @@ public class RegisterMenu extends Menu {
 				System.out.println("Passwords dont match try again");
 			}
 		}
-		byte[] salt = RegisterMenu.getSalt();
-		String passHash = ""; 
-		System.out.println("Action+ " + salt);
-		passHash = getSecurePassword(passHash, salt);
-		System.out.println("LAStBIT" + salt);
-		User user = new User(userName, realName, passHash, salt, age);
+		byte[] salt = getSalt();
+		//System.out.println("Action+ " + salt);
+		pass = getSecurePassword(pass, salt);
+		//System.out.println("LAStBIT" + salt);
+		User user = new User(userName, realName, pass, salt, age);
 		return user;
 	}
 }
