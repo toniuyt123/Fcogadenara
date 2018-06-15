@@ -14,11 +14,12 @@ public class MainMenu extends Menu {
 	}
 	@Override
 	public Object action(Menu caller, Scanner in) {
-		caller = this;
 		Menu res = null; 
 		while(res == null) {
 			res = getSelectedSub(in.next());
+			System.out.println("AWE");
 		}
+		res.prevMenu = this;
 		return res;
 			
 	}

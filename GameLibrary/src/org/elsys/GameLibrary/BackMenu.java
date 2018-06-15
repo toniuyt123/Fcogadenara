@@ -13,6 +13,6 @@ public class BackMenu extends Menu {
 	}
 	@Override
 	public Object action(Menu caller, Scanner in) {
-		return caller;
+		return prevMenu.prevMenu;
 	}
 }

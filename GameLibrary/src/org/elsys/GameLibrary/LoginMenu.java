@@ -5,15 +5,16 @@ import java.util.Scanner;
 import java.sql.*;
 
 public class LoginMenu extends Menu{
-	public LoginMenu(String id, String name, List<Menu> subMenus) {
+	Connection conn;
+	
+	public LoginMenu(String id, String name, List<Menu> subMenus, Connection conn) {
 		super(id, name, subMenus);
+		this.conn = conn;
 	}
 
 	@Override
 	public Object action(Menu caller, Scanner in) {
-		String connectionString = "jdbc:mysql://localhost:3306/GameLibrary?user=root&password=root";
 		try {
-			Connection conn = DriverManager.getConnection(connectionString);
 			String userName = in.next();
 			System.out.print("Enter Password: ");
 			String password = in.next();

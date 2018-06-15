@@ -7,6 +7,7 @@ public abstract class Menu {
 	protected String menuId;
 	protected String name;
 	protected List<Menu> subMenus;
+	protected Menu prevMenu;
 	
 	public Menu(String menuId, String name, List<Menu> subMenus) {
 		this.menuId = menuId;
@@ -29,9 +30,9 @@ public abstract class Menu {
 				return m;
 			}
 		}
-		System.out.print("\n\n\n\n\n");
-		this.show();
-		System.out.println("Wrong selection.");
+		//System.out.print("\n\n\n\n\n");
+		//this.show();
+		//System.out.println("Wrong selection.");
 		return null;
 	}
 	
@@ -40,7 +41,7 @@ public abstract class Menu {
 			return;
 		StringBuilder sb = new StringBuilder();
 		System.out.println(name);
-		System.out.println("List of available commands: ");
+		System.out.println("List of available sub menus: ");
 		for(Menu m : subMenus) {
 			sb.append(m.getId());
 			sb.append(" - ");

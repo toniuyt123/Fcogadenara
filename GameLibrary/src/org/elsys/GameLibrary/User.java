@@ -131,17 +131,18 @@ public class User {
 		try {
 			String insertString = "INSERT INTO GamesUsers "
 								+ "(UserId, GameId, Rating, Status)"
-								+ "Value(?, ?, ?, ?)";
+								+ "VALUES(?, ?, ?, ?)";
 			prp = conn.prepareStatement(insertString);
 			prp.setInt(1, id);
 			GameLibrary.showAllGames(conn);
 			System.out.println("Enter game id");
 			prp.setInt(2, in.nextInt());
 			System.out.println("Enter game rating");
-			prp.setFloat(3, in.nextFloat());
+			prp.setDouble(3, in.nextDouble());
 			System.out.println("Enter game Status");
-			prp.setFloat(4, in.nextFloat());
-			prp.executeQuery();
+			prp.setInt(4, in.nextInt());
+			prp.executeUpdate();
+			conn.commit();
 		}catch (Exception e){
 			System.out.println(e.getMessage());
 		} finally {
