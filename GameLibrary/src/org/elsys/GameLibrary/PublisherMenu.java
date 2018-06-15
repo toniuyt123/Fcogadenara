@@ -28,19 +28,26 @@ public class PublisherMenu extends Menu {
 				System.out.println("wut");
 				if(res != null) {
 					System.out.println("Oke?");
+					res.prevMenu = this;
 					break;
 				}
 				if(input.equals("3")) {
 					GameLibrary.showAllGames(conn);
 				}else if(input.equals("4")){
 					currPublisher.addGame(conn, in);
+					break;
 				}else if(input.equals("5")) {
 					currPublisher.removeGame(conn, in);
+					break;
 				}else if(input.equals("6")) {
 					currPublisher.updateGame(conn, in);
+					break;
 				}
 			}
-			res.prevMenu = this;
+			if(res == null) {
+				res = this;
+				System.out.println("Yo");
+			}
 			return res;
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block

@@ -6,13 +6,22 @@ public class Publisher {
 	private String name;
 	private String establishedDate;
 	private String passHash;
+	private byte[] passSalt;
 	private int id;
 	
-	public Publisher(int id, String name, String passHash, String establishedDate) {
+	public Publisher(int id, String name, String passHash, byte[] passSalt, String establishedDate) {
 		this.id = id;
 		this.name = name;
 		this.passHash = passHash;
 		this.establishedDate = establishedDate;
+		this.passSalt = passSalt;
+	}
+	
+	public Publisher(String name, String passHash, byte[] passSalt,String establishedDate) {
+		this.name = name;
+		this.passHash = passHash;
+		this.establishedDate = establishedDate;
+		this.passSalt = passSalt;
 	}
 	
 	public String getName() {
@@ -31,17 +40,46 @@ public class Publisher {
 		return this.id;
 	}
 	
+	public byte[] getPassSalt() {
+		return this.passSalt;
+	}
+	
+	
+	
+	public static byte[] getSalt(Connection conn, String publisherName) throws SQLException {
+		PreparedStatement prp = null;
+		conn.setAutoCommit(false);
+		try {
+			String selectString = "SELECT PasswordSalt FROM Publishers WHERE Name = ?";
+			prp = conn.prepareStatement(selectString);
+			prp.setString(1, publisherName);
+			ResultSet rs = prp.executeQuery();
+			rs.next();
+			byte[] passsalt = rs.getBytes("PasswordSalt");
+			System.out.println("GET +" + passsalt);
+			return passsalt;
+		}catch (Exception e){
+			System.out.println(e.getMessage());
+			return null;
+		} finally {
+			if (prp != null) {
+				prp.close();
+			}
+		}
+	}
+	
 	public static void addPublisher(Connection conn, Publisher publisher) throws SQLException {
 		PreparedStatement prp = null;
 		conn.setAutoCommit(false);
 		try {
 			String insertSql = "INSERT INTO Publishers "
-					+ "(Name, EstablishedDate, PasswordHash)"
-					+ "VALUES(?, ?, ?)";
+					+ "(Name, EstablishedDate, PasswordHash, PasswordSalt)"
+					+ "VALUES(?, ?, ?, ?)";
 			prp = conn.prepareStatement(insertSql);
 			prp.setString(1, publisher.getName());
 			prp.setString(2, publisher.getEstablishedDate());
 			prp.setString(3, publisher.getPassHash());
+			prp.setBytes(4, publisher.getPassSalt());
 			prp.executeUpdate();
 			conn.commit();
 		}catch (Exception e){
@@ -59,7 +97,7 @@ public class Publisher {
 		PreparedStatement prp = null;
 		conn.setAutoCommit(false);
 		try {
-			String selectString = "SELECT * FROM Publishers WHERE UserName = ? AND PasswordHash = ?";
+			String selectString = "SELECT * FROM Publishers WHERE Name = ? AND PasswordHash = ?";
 			prp = conn.prepareStatement(selectString);
 			prp.setString(1, name);
 			prp.setString(2, passHash);
@@ -68,8 +106,9 @@ public class Publisher {
 			String pname = rs.getString("Name");
 			
 			String established = rs.getString("EstablishedDate");
+			byte[] passsalt = rs.getBytes("PasswordSalt");
 			int id = rs.getInt("Id");
-			return new Publisher(id, pname, passHash, established);
+			return new Publisher(id, pname, passHash, passsalt, established);
 		}catch (Exception e){
 			System.out.println(e.getMessage());
 			return null;
@@ -102,12 +141,12 @@ public class Publisher {
 		PreparedStatement prp = null;
 		conn.setAutoCommit(false);
 		try {
-			String insertString = "INSERT INTO Game "
+			String insertString = "INSERT INTO Games "
 								+ "(Title, PublisherId, ReleaseDate)"
 								+ "VALUES(?, ?, ?)";
 			prp = conn.prepareStatement(insertString);
 			System.out.println("Enter game title");
-			prp.setString(1, in.nextLine());
+			prp.setString(1, in.next());
 			prp.setInt(2, getId());
 			prp.setDate(3, Date.valueOf(java.time.LocalDate.now()));
 			conn.commit();

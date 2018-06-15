@@ -27,15 +27,26 @@ public class UserMenu extends Menu {
 				System.out.println("wut");
 				if(res != null) {
 					System.out.println("Oke?");
+					res.prevMenu = this;
 					break;
 				}
 				if(input.equals("3")) {
 					GameLibrary.showUserGames(currUser, conn);
 				}else if(input.equals("4")){
 					currUser.addGame(conn, in);
+					break;
+				}else if(input.equals("5")) {
+					currUser.removeGame(conn, in);
+					break;
+				}else if(input.equals("6")) {
+					currUser.updateGame(conn, in);
+					break;
 				}
 			}
-			res.prevMenu = this;
+			if(res == null) {
+				res = this;
+				System.out.println("Yo");
+			}
 			return res;
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block

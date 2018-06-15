@@ -12,7 +12,7 @@ public class Main {
 			Class.forName("com.mysql.jdbc.Driver");
 			String connectionString = "jdbc:mysql://localhost:3306/?user=root&password=root";
 			//GameLibrary.createDatabase(DriverManager.getConnection(connectionString));
-			connectionString = "jdbc:mysql://localhost:3306/GameLibrary?user=root&password=root";
+			connectionString = "jdbc:mysql://localhost:3306/GameLibrary1?user=root&password=root";
 			conn = DriverManager.getConnection(connectionString);
 			//GameLibrary.samplePopulate(conn);
 			//GameLibrary.showUserGames(new User(1, "Toniuyt", "Antonio Milev", "kekeckekec", 17), conn);
@@ -23,8 +23,8 @@ public class Main {
 			RegisterMenu register = new RegisterMenu("1", "Register", null);
 			LoginMenu login = new LoginMenu("2", "Login", null, conn);
 			UserMenu userMenu = new UserMenu("1", "User", new ArrayList<Menu>(Arrays.asList(back, register, login)), conn);
-			PublisherMenu publishMenu = new PublisherMenu("2", "Publisher", new ArrayList<Menu>(Arrays.asList(back, register, login)), conn);
-			MainMenu main = new MainMenu("-", "Main Menu", new ArrayList<Menu>(Arrays.asList(exit, userMenu)));
+			PublisherMenu publisherMenu = new PublisherMenu("2", "Publisher", new ArrayList<Menu>(Arrays.asList(back, register, login)), conn);
+			MainMenu main = new MainMenu("-", "Main Menu", new ArrayList<Menu>(Arrays.asList(exit, userMenu, publisherMenu)));
 	//		/main.show();
 			Menu oldMenu = main, currMenu =  main;
 			Scanner in = new Scanner(System.in);
@@ -46,6 +46,16 @@ public class Main {
 						}else if(currMenu instanceof LoginMenu) {
 							currUser = (User) res;
 							userMenu.setCurrUser(currUser);
+						}
+						currMenu = currMenu.prevMenu;
+						
+					}else if(res instanceof Publisher)
+					{
+						if(currMenu instanceof RegisterMenu) {
+							Publisher.addPublisher(conn, (Publisher) res);
+						}else if(currMenu instanceof LoginMenu) {
+							currPubl = (Publisher) res;
+							publisherMenu.setcurrPublisher(currPubl);
 						}
 						currMenu = currMenu.prevMenu;
 					}else if(res instanceof Menu) {

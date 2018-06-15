@@ -128,6 +128,7 @@ public class User {
 	public void addGame(Connection conn, Scanner in) throws SQLException {
 		PreparedStatement prp = null;
 		conn.setAutoCommit(false);
+		conn.setAutoCommit(false);
 		try {
 			String insertString = "INSERT INTO GamesUsers "
 								+ "(UserId, GameId, Rating, Status)"
@@ -138,12 +139,65 @@ public class User {
 			System.out.println("Enter game id");
 			prp.setInt(2, in.nextInt());
 			System.out.println("Enter game rating");
-			prp.setDouble(3, in.nextDouble());
+			prp.setFloat(3, in.nextFloat());
 			System.out.println("Enter game Status");
 			prp.setInt(4, in.nextInt());
 			prp.executeUpdate();
 			conn.commit();
 		}catch (Exception e){
+			System.out.println(e.getMessage());
+			conn.rollback();
+		} finally {
+			if (prp != null) {
+				prp.close();
+			}
+		}
+	}
+	
+	public void removeGame(Connection conn, Scanner in) throws SQLException {
+		PreparedStatement prp = null;
+		conn.setAutoCommit(false);
+		conn.setAutoCommit(false);
+		try {
+			String deleteString = "DELETE FROM GamesUsers "
+								+ "WHERE UserId = ? AND GameId = ?";
+			prp = conn.prepareStatement(deleteString);
+			prp.setInt(1, id);
+			GameLibrary.showUserGames(this, conn);
+			System.out.println("Enter game id");
+			prp.setInt(2, in.nextInt());
+			prp.executeUpdate();
+			conn.commit();
+		}catch (Exception e){
+			System.out.println(e.getMessage());
+			conn.rollback();
+		} finally {
+			if (prp != null) {
+				prp.close();
+			}
+		}
+	}
+	
+	public void updateGame(Connection conn, Scanner in) throws SQLException {
+		PreparedStatement prp = null;
+		conn.setAutoCommit(false);
+		try {
+			String updateString = "UPDATE GamesUsers gu "
+								+ "SET gu.Rating = ?, gu.Status = ?"
+								+ "WHERE gu.UserId = ? AND gu.GameId = ?"; 
+			prp = conn.prepareStatement(updateString);
+			prp.setInt(3, id);
+			GameLibrary.showUserGames(this, conn);
+			System.out.println("Enter game id: ");
+			prp.setInt(4, in.nextInt());
+			System.out.println("Enter new rating: ");
+			prp.setFloat(1, in.nextFloat());
+			System.out.println("Enter new status: ");
+			prp.setInt(2, in.nextInt());
+			prp.executeUpdate();
+			conn.commit();
+		}catch (Exception e){
+			conn.rollback();
 			System.out.println(e.getMessage());
 		} finally {
 			if (prp != null) {
@@ -151,4 +205,5 @@ public class User {
 			}
 		}
 	}
+	
 }

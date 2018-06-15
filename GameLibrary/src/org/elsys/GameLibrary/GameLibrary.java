@@ -9,7 +9,7 @@ public class GameLibrary {
 			ResultSet rs = createQuery.executeQuery("SELECT COUNT(*) FROM information_schema.tables WHERE table_schema = 'GameLibrary'");
 			rs.next();
 			if(rs.getInt("COUNT(*)") <= 0) {
-				createQuery.execute("CREATE DATABASE GameLibrary");
+				createQuery.execute("CREATE DATABASE GameLibrary1");
 				conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/GameLibrary?user=root&password=root");
 				
 				Statement query = conn.createStatement();			
@@ -17,7 +17,8 @@ public class GameLibrary {
 						+ "Id INTEGER NOT NULL AUTO_INCREMENT PRIMARY KEY,"
 						+ "Name VARCHAR(100) NOT NULL,"
 						+ "EstablishedDate DATE NOT NULL,"
-						+ "PasswordHash VARCHAR(250) NOT NULL"
+						+ "PasswordHash VARCHAR(250) NOT NULL,"
+						+ "PasswordSalt BLOB"
 						+ ");");
 				
 				query.execute("CREATE TABLE RatingAsWord ("
