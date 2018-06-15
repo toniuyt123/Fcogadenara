@@ -23,6 +23,7 @@ public class Main {
 			RegisterMenu register = new RegisterMenu("1", "Register", null);
 			LoginMenu login = new LoginMenu("2", "Login", null, conn);
 			UserMenu userMenu = new UserMenu("1", "User", new ArrayList<Menu>(Arrays.asList(back, register, login)), conn);
+			PublisherMenu publishMenu = new PublisherMenu("2", "Publisher", new ArrayList<Menu>(Arrays.asList(back, register, login)), conn);
 			MainMenu main = new MainMenu("-", "Main Menu", new ArrayList<Menu>(Arrays.asList(exit, userMenu)));
 	//		/main.show();
 			Menu oldMenu = main, currMenu =  main;

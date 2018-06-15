@@ -36,6 +36,8 @@ public class PublisherMenu extends Menu {
 					currPublisher.addGame(conn, in);
 				}else if(input.equals("5")) {
 					currPublisher.removeGame(conn, in);
+				}else if(input.equals("6")) {
+					currPublisher.updateGame(conn, in);
 				}
 			}
 			res.prevMenu = this;
