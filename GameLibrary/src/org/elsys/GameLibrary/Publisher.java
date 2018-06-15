@@ -97,4 +97,48 @@ public class Publisher {
 			}
 		}
 	}
+	
+	public void addGame(Connection conn, Scanner in)throws SQLException {
+		PreparedStatement prp = null;
+		conn.setAutoCommit(false);
+		try {
+			String insertString = "INSERT INTO Game "
+								+ "(Title, PublisherId, ReleaseDate)"
+								+ "VALUES(?, ?, ?)";
+			prp = conn.prepareStatement(insertString);
+			System.out.println("Enter game title");
+			prp.setString(1, in.nextLine());
+			prp.setInt(2, getId());
+			prp.setDate(3, java.sql.Date.valueOf(java.time.LocalDate.now()));
+			conn.commit();
+		}catch (Exception e){
+			System.out.println(e.getMessage());
+		} finally {
+			if (prp != null) {
+				prp.close();
+			}
+		}
+	}
+	
+	public void removeGame(Connection conn, Scanner in)throws SQLException {
+		PreparedStatement prp = null;
+		conn.setAutoCommit(false);
+		try {
+			String insertString = "DELETE FROM Games g"
+								+ "WHERE g.PublisherId = ? AND g.Title = ?";
+			prp = conn.prepareStatement(insertString);
+			prp.setInt(1, getId());
+			System.out.println("Enter game title");
+			prp.setString(2, in.nextLine());
+			if(Menu.confirm("Are you sure you want to delete this game?", in)) {
+				conn.commit();
+			}
+		}catch (Exception e){
+			System.out.println(e.getMessage());
+		} finally {
+			if (prp != null) {
+				prp.close();
+			}
+		}
+	}
 }
